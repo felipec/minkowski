@@ -2,7 +2,18 @@
 
 <html lang="en">
 
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
   <body style="display: flex; margin: 0px;">
+    <div id="controls">
+      <h1>Contols</h1>
+      <label>time</label>
+      <input v-model="time">
+      <input v-model="time" type="range" min="-4" max="4" value="0" class="slider" step="0.01">
+      <label>Speed</label>
+      <input v-model="speed">
+      <input v-model="speed" type="range" min="-1" max="1" value="0" class="slider" step="0.01">
+    </div>
     <div id="main" style="flex: 1;">
       <canvas id="canvas" style="background-color: white;"></canvas>
     </div>

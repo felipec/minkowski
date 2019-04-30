@@ -241,16 +241,22 @@ class Universe {
 
 let universe = new Universe(universe_info);
 
-var steps = 400;
-var time_span = 8;
-universe.time = -(time_span / 2);
+var controls = new Vue({
+  el: '#controls',
+  data: {
+    speed: 0,
+    time: 0,
+  },
+  watch: {
+    time: function(v) {
+      universe.time = v;
+      redraw();
+    },
+    speed: function(v) {
+      universe.origin_rf.v = -v;
+      redraw();
+    },
+  },
+})
 
-function timed() {
-  redraw();
-  universe.time += (1 / steps);
-  if (universe.time < (time_span / 2)) {
-    setTimeout(timed, 1);
-  }
-}
-
-timed();
+redraw();
