@@ -115,8 +115,6 @@ function draw_event(x, y, v, color) {
   draw_circle(x, y, color);
 }
 
-var global_speed = 0.0;
-
 var universe_info = {
   time: 0,
   reference_frames: [
@@ -136,37 +134,22 @@ var universe_info = {
 function redraw() {
   ctx.clearRect(-canvas.width, -canvas.height, canvas.width * 2, canvas.height * 2);
   draw_grid();
-  universe.time = global_time;
   universe.draw();
-}
-
-var steps = 400;
-var time_span = 8;
-var global_time = -(time_span / 2);
-
-function timed() {
-  redraw();
-  global_time += (1 / steps);
-  if (global_time < (time_span / 2)) {
-    setTimeout(timed, 1);
-  }
 }
 
 class ReferenceFrame {
 
-  constructor(x, y, v, color) {
+  constructor(parent_rf, x, y, v, color) {
+    this.parent_rf = parent_rf;
+
     this.x = x;
     this.y = y;
+    this.v = v;
     this.color = color;
 
-    this.v = add_velocity(v, -global_speed);
-
-    function make_relative(f, rx, ry, rv) {
+    function make_relative(f) {
       return function(x, y, v, color) {
-        x += this.x;
-        y += this.y;
-        [x, y] = lorentz_transform(x, y, -this.v);
-        v = add_velocity(v, this.v);
+        [x, y, v] = this.transform(x, y, v);
         f(x, y, v, color);
       }
     }
@@ -174,6 +157,18 @@ class ReferenceFrame {
     this.draw_path = make_relative(draw_path);
     this.draw_space = make_relative(draw_space);
     this.draw_event = make_relative(draw_event);
+  }
+
+  transform(x, y, v) {
+    let ov = this.v;
+    x += this.x;
+    y += this.y;
+    if (this.parent_rf) {
+      ov = add_velocity(ov, this.parent_rf.v);
+    }
+    [x, y] = lorentz_transform(x, y, -ov);
+    v = add_velocity(v, ov);
+    return [x, y, v];
   }
 
   draw_axis() {
@@ -186,9 +181,7 @@ class ReferenceFrame {
 class Universe {
 
   constructor(info) {
-    this.info = info;
-
-    this.rf = new ReferenceFrame(0, 0, 0);
+    this.origin_rf = new ReferenceFrame(null, 0, 0, 0);
 
     this.reference_frames = [];
     this.objects = info.objects;
@@ -197,19 +190,21 @@ class Universe {
 
     for (let key in info.reference_frames) {
       let e = info.reference_frames[key];
-      e.ctx = new ReferenceFrame(e.x, e.y, e.v, e.color);
+      e.ctx = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);
       this.reference_frames[key] = e.ctx;
     }
 
-    for (let e of info.objects) {
-      let rf = info.reference_frames[e.rf];
+    // Calculate paths of objects
+
+    for (let e of this.objects) {
+      let rf = this.reference_frames[e.rf];
       let [x, y] = [e.x + rf.x, e.y + rf.y];
       let v = rf.v;
 
       [x, y] = lorentz_transform(x, y, -v);
       v = add_velocity(v, e.v);
 
-      e.ctx = { x: x, y: y, v: v };
+      e.ctx = [x, y, v];
     }
   }
 
@@ -233,17 +228,29 @@ class Universe {
     }
 
     for (let e of this.objects) {
-      let [x, y, v] = [e.ctx.x, e.ctx.y, e.ctx.v];
+      let [x, y, v] = e.ctx;
 
       x += -v * (y - t);
       y = t;
 
-      this.rf.draw_event(x, y, 0, e.color);
+      this.origin_rf.draw_event(x, y, 0, e.color);
     }
   }
 
 }
 
 let universe = new Universe(universe_info);
+
+var steps = 400;
+var time_span = 8;
+universe.time = -(time_span / 2);
+
+function timed() {
+  redraw();
+  universe.time += (1 / steps);
+  if (universe.time < (time_span / 2)) {
+    setTimeout(timed, 1);
+  }
+}
 
 timed();
