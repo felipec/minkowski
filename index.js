@@ -92,8 +92,8 @@ function draw_circle(x, y, color) {
 
 function lorentz_transform(x, y, v) {
   let g = 1 / Math.sqrt(1 - v ** 2);
-  let x_ = g * (x + v * y);
-  let y_ = g * (y + v * x);
+  let x_ = g * (x - v * y);
+  let y_ = g * (y - v * x);
   return [x_, y_];
 }
 
@@ -119,7 +119,7 @@ function make_relative(f, rx, ry, rv) {
   return function(x, y, v, color) {
     x += rx;
     y += ry;
-    [x, y] = lorentz_transform(x, y, rv);
+    [x, y] = lorentz_transform(x, y, -rv);
     v = add_velocity(v, rv);
     f(x, y, v, color);
   }
@@ -167,7 +167,7 @@ function draw_time(u, rfid, t) {
     let rfb = rfs[e.rf];
     let rfb_i = u.reference_frames[e.rf];
     let v = add_velocity(rfb_i.v, -rfa_i.v);
-    let [x, y] = lorentz_transform(e.x, e.y, v);
+    let [x, y] = lorentz_transform(e.x, e.y, -v);
 
     v = add_velocity(v, e.v);
     x += -v * (y - t);
