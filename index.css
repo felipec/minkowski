@@ -22,6 +22,16 @@ body {
   grid-gap: 8px;
 }
 
+#animate {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 8px;
+}
+
+#animate-button {
+  grid-column: 1 / 3;
+}
+
 #canvas {
   position: absolute;
   background-color: white;

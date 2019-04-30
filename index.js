@@ -236,6 +236,47 @@ class Universe {
 
 }
 
+class Animation {
+
+  constructor(seconds) {
+    this.seconds = seconds;
+  }
+
+  begin() {
+    this.cancel();
+
+    this.first_timestamp = null;
+    this.start = animate.start;
+    this.end = animate.end;
+
+    controls.time = this.start;
+    this.request();
+  }
+
+  callback(timestamp) {
+    if (this.first_timestamp == null) {
+      this.first_timestamp = timestamp;
+    }
+
+    let progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
+    controls.time = this.start + (this.end - this.start) * progress;
+
+    redraw();
+
+    if (controls.time <= this.end) {
+      this.request();
+    }
+  }
+
+  request() {
+    this.request_id = requestAnimationFrame(this.callback.bind(this));
+  }
+
+  cancel() {
+    cancelAnimationFrame(this.request_id);
+  }
+}
+
 universe = new Universe(universe_info);
 
 var controls = new Vue({
@@ -255,5 +296,15 @@ var controls = new Vue({
     },
   },
 })
+
+var animate = new Vue({
+  el: '#animate',
+  data: {
+    start: -4,
+    end: 4,
+  },
+})
+
+var animation = new Animation(10);
 
 resize_canvas();
