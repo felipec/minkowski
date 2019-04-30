@@ -1,23 +1,23 @@
 var canvas = document.getElementById('canvas');
-
 var ctx = canvas.getContext("2d");
 
-fitToContainer(canvas);
+var universe;
+var size;
+var scale = 100;
 
-function fitToContainer(canvas){
-  // Make it visually fill the positioned parent
-  canvas.style.width ='100%';
-  canvas.style.height='100%';
-  // ...then set the internal size to match
-  canvas.width  = canvas.offsetWidth;
+function resize_canvas() {
+  canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.scale(1, -1);
+  size = Math.max(canvas.width / 2, canvas.height / 2) * 10;
+  redraw();
 }
 
-var scale = 100;
-var size = Math.max(canvas.width / 2, canvas.height / 2) * 10;
+canvas.style.width ='100%';
+canvas.style.height='100%';
 
-ctx.translate(canvas.width / 2, canvas.height / 2);
-ctx.scale(1, -1);
+window.addEventListener('resize', resize_canvas, false);
 
 function draw_grid() {
   let d = scale;
@@ -239,7 +239,7 @@ class Universe {
 
 }
 
-let universe = new Universe(universe_info);
+universe = new Universe(universe_info);
 
 var controls = new Vue({
   el: '#controls',
@@ -259,4 +259,4 @@ var controls = new Vue({
   },
 })
 
-redraw();
+resize_canvas();
