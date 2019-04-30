@@ -14,9 +14,6 @@ function resize_canvas() {
   redraw();
 }
 
-canvas.style.width ='100%';
-canvas.style.height='100%';
-
 window.addEventListener('resize', resize_canvas, false);
 
 function draw_grid() {
