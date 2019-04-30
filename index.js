@@ -119,9 +119,8 @@ function make_relative(f, rx, ry, rv) {
   return function(x, y, v, color) {
     x += rx;
     y += ry;
-    [x, y] = lorentz_transform(x, y, -v);
+    [x, y] = lorentz_transform(x, y, rv);
     v = add_velocity(v, rv);
-    [x, y] = lorentz_transform(x, y, v);
     f(x, y, v, color);
   }
 }
