@@ -115,71 +115,10 @@ function draw_event(x, y, v, color) {
   draw_circle(x, y, color);
 }
 
-function make_relative(f, rx, ry, rv) {
-  return function(x, y, v, color) {
-    x += rx;
-    y += ry;
-    [x, y] = lorentz_transform(x, y, -rv);
-    v = add_velocity(v, rv);
-    f(x, y, v, color);
-  }
-}
-
-function new_reference_frame(x, y, v) {
-  v = add_velocity(v, -global_speed);
-  return {
-    draw_path: make_relative(draw_path, x, y, v),
-    draw_space: make_relative(draw_space, x, y, v),
-    draw_event: make_relative(draw_event, x, y, v),
-  };
-}
-
-function draw_axis(rf, color) {
-  rf.draw_path(0, 0, 0.0, color);
-  rf.draw_space(0, 0, 0.0, color);
-}
-
-function draw_universe(u) {
-  for (e of u.reference_frames) {
-    rf = new_reference_frame(e.x, e.y, e.v);
-    draw_axis(rf, e.color);
-    rfs[e.id] = rf;
-  }
-
-  for (e of u.objects) {
-    rf = rfs[e.rf];
-    rf.draw_path(e.x, e.y, e.v, e.color);
-  }
-}
-
-function draw_all_events(u) {
-  for (e of u.events) {
-    rf = rfs[e.rf];
-    rf.draw_event(e.x, e.y, e.v, e.color);
-  }
-}
-
-function draw_time(u, rfid, t) {
-  let rfa = rfs[rfid];
-  let rfa_i = u.reference_frames[rfid];
-
-  for (e of u.objects) {
-    let rfb = rfs[e.rf];
-    let rfb_i = u.reference_frames[e.rf];
-    let v = add_velocity(rfb_i.v, -rfa_i.v);
-    let [x, y] = lorentz_transform(e.x, e.y, -v);
-
-    v = add_velocity(v, e.v);
-    x += -v * (y - t);
-
-    rfa.draw_event(x, t, 0, e.color);
-  }
-}
-
 var global_speed = 0.0;
-let rfs = [];
 
-var universe = {
+var universe_info = {
+  time: 0,
   reference_frames: [
     { id: 0, x: 0, y: 0, v: 0, color: '#00ff' },
     { id: 1, x: 0, y: 0, v: 0.5, color: '#f00f' },
@@ -197,9 +136,8 @@ var universe = {
 function redraw() {
   ctx.clearRect(-canvas.width, -canvas.height, canvas.width * 2, canvas.height * 2);
   draw_grid();
-  draw_universe(universe);
-  draw_all_events(universe);
-  draw_time(universe, 0, global_time);
+  universe.time = global_time;
+  universe.draw();
 }
 
 var steps = 400;
@@ -213,5 +151,99 @@ function timed() {
     setTimeout(timed, 1);
   }
 }
+
+class ReferenceFrame {
+
+  constructor(x, y, v, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+
+    this.v = add_velocity(v, -global_speed);
+
+    function make_relative(f, rx, ry, rv) {
+      return function(x, y, v, color) {
+        x += this.x;
+        y += this.y;
+        [x, y] = lorentz_transform(x, y, -this.v);
+        v = add_velocity(v, this.v);
+        f(x, y, v, color);
+      }
+    }
+
+    this.draw_path = make_relative(draw_path);
+    this.draw_space = make_relative(draw_space);
+    this.draw_event = make_relative(draw_event);
+  }
+
+  draw_axis() {
+    this.draw_path(0, 0, 0, this.color);
+    this.draw_space(0, 0, 0, this.color);
+  }
+
+}
+
+class Universe {
+
+  constructor(info) {
+    this.info = info;
+
+    this.rf = new ReferenceFrame(0, 0, 0);
+
+    this.reference_frames = [];
+    this.objects = info.objects;
+    this.events = info.events;
+    this.time = info.time;
+
+    for (let key in info.reference_frames) {
+      let e = info.reference_frames[key];
+      e.ctx = new ReferenceFrame(e.x, e.y, e.v, e.color);
+      this.reference_frames[key] = e.ctx;
+    }
+
+    for (let e of info.objects) {
+      let rf = info.reference_frames[e.rf];
+      let [x, y] = [e.x + rf.x, e.y + rf.y];
+      let v = rf.v;
+
+      [x, y] = lorentz_transform(x, y, -v);
+      v = add_velocity(v, e.v);
+
+      e.ctx = { x: x, y: y, v: v };
+    }
+  }
+
+  draw() {
+    let rfs = this.reference_frames;
+    let t = this.time;
+
+    for (let key in this.reference_frames) {
+      let e = rfs[key];
+      e.draw_axis();
+    }
+
+    for (let e of this.objects) {
+      let rf = rfs[e.rf];
+      rf.draw_path(e.x, e.y, e.v, e.color);
+    }
+
+    for (let e of this.events) {
+      let rf = rfs[e.rf];
+      rf.draw_event(e.x, e.y, e.v, e.color);
+    }
+
+    for (let e of this.objects) {
+      let [x, y, v] = [e.ctx.x, e.ctx.y, e.ctx.v];
+
+      x += -v * (y - t);
+      y = t;
+
+      this.rf.draw_event(x, y, 0, e.color);
+    }
+  }
+
+}
+
+let universe = new Universe(universe_info);
 
 timed();
