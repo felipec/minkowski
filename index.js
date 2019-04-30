@@ -159,6 +159,23 @@ function draw_all_events(u) {
   }
 }
 
+function draw_time(u, rfid, t) {
+  let rfa = rfs[rfid];
+  let rfa_i = u.reference_frames[rfid];
+
+  for (e of u.objects) {
+    let rfb = rfs[e.rf];
+    let rfb_i = u.reference_frames[e.rf];
+    let v = add_velocity(rfb_i.v, -rfa_i.v);
+    let [x, y] = lorentz_transform(e.x, e.y, v);
+
+    v = add_velocity(v, e.v);
+    x += -v * (y - t);
+
+    rfa.draw_event(x, t, 0, e.color);
+  }
+}
+
 var global_speed = 0.0;
 let rfs = [];
 
@@ -182,6 +199,19 @@ function redraw() {
   draw_grid();
   draw_universe(universe);
   draw_all_events(universe);
+  draw_time(universe, 0, global_time);
 }
 
-redraw();
+var steps = 400;
+var time_span = 8;
+var global_time = -(time_span / 2);
+
+function timed() {
+  redraw();
+  global_time += (1 / steps);
+  if (global_time < (time_span / 2)) {
+    setTimeout(timed, 1);
+  }
+}
+
+timed();
