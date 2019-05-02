@@ -32,6 +32,16 @@ body {
   grid-column: 1 / 3;
 }
 
+#object {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 8px;
+}
+
+#object-button {
+  grid-column: 1 / 3;
+}
+
 #canvas {
   position: absolute;
   background-color: white;

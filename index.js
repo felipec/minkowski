@@ -191,6 +191,10 @@ class Universe {
       this.reference_frames[key] = e.ctx;
     }
 
+    this.update();
+  }
+
+  update() {
     // Calculate paths of objects
 
     for (let e of this.objects) {
@@ -302,6 +306,25 @@ var animate = new Vue({
   data: {
     start: -4,
     end: 4,
+  },
+})
+
+var object = new Vue({
+  el: '#object',
+  data: {
+    rf: 0,
+    x: 0,
+    y: 0,
+    v: 0,
+    color: '#000f',
+  },
+  methods: {
+    add: function() {
+      object = { rf: this.rf, x: this.x, y: this.y, v: this.v, color: this.color };
+      universe.objects.push(object);
+      universe.update();
+      redraw();
+    }
   },
 })
 

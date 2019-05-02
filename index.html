@@ -28,6 +28,20 @@
         <input v-model="end" id="animate-end">
         <button id="animate-button" onClick="animation.begin();">Begin</button>
       </div>
+      <h2>Add object</h2>
+      <div id="object">
+        <label>Reference frame</label>
+        <input v-model.number="rf">
+        <label>X</label>
+        <input v-model.number="x">
+        <label>Y</label>
+        <input v-model.number="y">
+        <label>Velocity</label>
+        <input v-model.number="v">
+        <label>Color</label>
+        <input v-model="color">
+        <button id="object-button" @click="add();">Add</button>
+      </div>
     </div>
     <div id="main">
       <canvas id="canvas"></canvas>
