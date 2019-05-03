@@ -120,16 +120,16 @@ function draw_event(x, y, v, color) {
 var universe_info = {
   time: 0,
   reference_frames: [
-    { id: 0, x: 0, y: 0, v: 0, color: '#00ff' },
-    { id: 1, x: 0, y: 0, v: 0.5, color: '#f00f' },
+    { id: 0, x: 0, y: 0, v: 0, color: '#00f4' },
+    { id: 1, x: 0, y: 0, v: 0.5, color: '#f004' },
   ],
   objects: [
-    { rf: 0, x: 1, y: 0, v: 0, color: '#00ff' },
-    { rf: 1, x: 1, y: 0, v: 0, color: '#f00f' },
+    { rf: 0, x: 0, y: 0, v: 0, color: '#00f8' },
+    { rf: 1, x: 0, y: 0, v: 0, color: '#f008' },
   ],
   events: [
-    { rf: 0, x: 1, y: 0, v: 0, color: '#00ff' },
-    { rf: 1, x: 1, y: 0, v: 0, color: '#f00f' },
+    { rf: 0, x: 0, y: 1, v: 0, color: '#00ff' },
+    { rf: 1, x: 0, y: 1, v: 0, color: '#f00f' },
   ],
 };
 
