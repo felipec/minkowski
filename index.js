@@ -94,6 +94,11 @@ function lorentz_transform(x, y, v) {
   return [x_, y_];
 }
 
+function lorentz_shift(x, y, dx, dy, v) {
+  [dx, dy] = lorentz_transform(dx, dy, v);
+  return [x + dx, y + dy];
+}
+
 function add_velocity(v, u) {
   return (v + u) / (1 + (v * u));
 }
@@ -156,14 +161,21 @@ class ReferenceFrame {
     this.draw_event = make_relative(draw_event);
   }
 
+  shift(x, y) {
+      return lorentz_shift(x, y, this.x, this.y, -this.v);
+  }
+
   transform(x, y, v) {
     let ov = this.v;
     x += this.x;
     y += this.y;
     if (this.parent_rf) {
       ov = add_velocity(ov, this.parent_rf.v);
+      [x, y] = lorentz_transform(x, y, -ov);
+      [x, y] = this.parent_rf.shift(x, y);
+    } else {
+      [x, y] = lorentz_transform(x, y, -ov);
     }
-    [x, y] = lorentz_transform(x, y, -ov);
     v = add_velocity(v, ov);
     return [x, y, v];
   }
@@ -229,12 +241,13 @@ class Universe {
     }
 
     for (let e of this.objects) {
+      let rf = this.origin_rf;
       let [x, y, v] = e.ctx;
 
       x += -v * (y - t);
       y = t;
 
-      this.origin_rf.draw_event(x, y, 0, e.color);
+      rf.draw_event(x, y, 0, e.color);
     }
   }
 
@@ -288,6 +301,8 @@ var controls = new Vue({
   data: {
     speed: 0,
     time: 0,
+    shift_x: 0,
+    shift_y: 0,
   },
   watch: {
     time: function(v) {
@@ -296,6 +311,14 @@ var controls = new Vue({
     },
     speed: function(v) {
       universe.origin_rf.v = -v;
+      redraw();
+    },
+    shift_x: function(v) {
+      universe.origin_rf.x = -v;
+      redraw();
+    },
+    shift_y: function(v) {
+      universe.origin_rf.y = -v;
       redraw();
     },
   },
