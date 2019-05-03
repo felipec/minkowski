@@ -1,0 +1,15 @@
+{
+  "time": 0,
+  "reference_frames": [
+    { "id": 0, "x": 0, "y": 0, "v": 0, "color": "#00ff" },
+    { "id": 1, "x": 1.1547, "y": 0.5774, "v": -0.5, "color": "#0fff" }
+  ],
+  "objects": [
+    { "rf": 0, "x": 1, "y": 0, "v": 0, "color": "#04ff" },
+    { "rf": 1, "x": 0, "y": 0, "v": 0, "color": "#0fff" }
+  ],
+  "events": [
+    { "rf": 0, "x": 0, "y": 0.5, "v": 0, "color": "#0ffb" },
+    { "rf": 0, "x": 0, "y": 2, "v": 0, "color": "#0ffb" }
+  ]
+}
