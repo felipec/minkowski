@@ -48,6 +48,8 @@
         <input v-model="color">
         <button id="object-button" @click="add();">Add</button>
       </div>
+      <h2>Upload</h2>
+      <input type="file" id="file" onChange="upload(this.files[0])">
     </div>
     <div id="main">
       <canvas id="canvas"></canvas>

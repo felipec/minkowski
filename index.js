@@ -139,6 +139,19 @@ function redraw() {
   universe.draw();
 }
 
+function upload(f) {
+  var reader = new FileReader();
+
+  reader.onload = function(e) {
+    let text = e.target.result;
+    let info = JSON.parse(text);
+    universe = new Universe(info);
+    redraw();
+  };
+
+  reader.readAsText(f);
+}
+
 class ReferenceFrame {
 
   constructor(parent_rf, x, y, v, color) {
