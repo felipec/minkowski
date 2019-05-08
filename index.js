@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2019 Felipe Contreras
+ *
+ * This file may be used under the terms of the GNU Lesser General Public
+ * License version 2.1.
+ *
+ */
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext("2d");
 
