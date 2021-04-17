@@ -223,11 +223,6 @@ class Universe {
       let e = info.reference_frames[key];
       this.reference_frames[key] = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);
     }
-
-    this.update();
-  }
-
-  update() {
   }
 
   draw() {
@@ -344,7 +339,6 @@ var object = new Vue({
     add() {
       object = { rf: this.rf, x: this.x, y: this.y, v: this.v, color: this.color };
       universe.objects.push(object);
-      universe.update();
       redraw();
     }
   },
