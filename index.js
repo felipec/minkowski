@@ -124,7 +124,6 @@ function draw_event(x, y, _, color) {
 }
 
 var universe_info = {
-  time: 0,
   reference_frames: [
     { id: 0, x: 0, y: 0, v: 0, color: 'hsl(240, 50%, 50%, 25%)' },
     { id: 1, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%, 25%)' },
@@ -211,7 +210,7 @@ class Universe {
     this.reference_frames = [];
     this.objects = info.objects;
     this.events = info.events;
-    this.time = info.time;
+    this.time = info.time || 0;
 
     for (let key in info.reference_frames) {
       let e = info.reference_frames[key];
@@ -288,7 +287,7 @@ var controls = new Vue({
   el: '#controls',
   data: {
     speed: 0,
-    time: 0,
+    time: universe.time,
     shift_x: 0,
     shift_y: 0,
   },
