@@ -45,8 +45,6 @@ function draw_grid() {
     ctx.lineTo(-i * d, size);
   }
 
-  ctx.closePath();
-
   ctx.stroke();
 
   // light cone
@@ -59,7 +57,6 @@ function draw_grid() {
   ctx.lineTo(size, size);
   ctx.moveTo(-size, size);
   ctx.lineTo(size, -size);
-  ctx.closePath();
 
   ctx.stroke();
 }
@@ -76,7 +73,6 @@ function draw_line(x, y, angle, color) {
   dy = size * Math.sin(angle);
   ctx.moveTo(rx - dx, ry - dy);
   ctx.lineTo(rx + dx, ry + dy);
-  ctx.closePath();
 
   ctx.stroke();
 }
@@ -92,7 +88,6 @@ function draw_circle(x, y, color) {
   ctx.fillStyle = color;
   ctx.arc(rx, ry, 8, 0, 2 * Math.PI);
   ctx.fill();
-  ctx.closePath();
 
   ctx.stroke();
 }
