@@ -183,10 +183,8 @@ class ReferenceFrame {
   }
 
   transform(x, y, v) {
-    let ov = this.v;
-    x += this.x;
-    y += this.y;
-    ov = add_velocity(ov, this.parent_rf.v);
+    [x, y] = [x + this.x, y + this.y]
+    let ov = add_velocity(this.v, this.parent_rf.v);
     [x, y] = lorentz_transform(x, y, -ov);
     [x, y] = this.parent_rf.shift(x, y);
     v = add_velocity(v, ov);
