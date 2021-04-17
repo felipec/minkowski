@@ -208,11 +208,11 @@ class Universe {
     this.origin_rf = new ReferenceFrame(null_rf, 0, 0, 0);
 
     this.reference_frames = [];
-    this.objects = info.objects;
-    this.events = info.events;
+    this.objects = info.objects || [];
+    this.events = info.events || [];
     this.time = info.time || 0;
 
-    for (let key in info.reference_frames) {
+    for (let key in info.reference_frames || []) {
       let e = info.reference_frames[key];
       this.reference_frames[key] = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);
     }
