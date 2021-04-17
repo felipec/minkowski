@@ -191,13 +191,9 @@ class ReferenceFrame {
     let ov = this.v;
     x += this.x;
     y += this.y;
-    if (this.parent_rf) {
-      ov = add_velocity(ov, this.parent_rf.v);
-      [x, y] = lorentz_transform(x, y, -ov);
-      [x, y] = this.parent_rf.shift(x, y);
-    } else {
-      [x, y] = lorentz_transform(x, y, -ov);
-    }
+    ov = add_velocity(ov, this.parent_rf.v);
+    [x, y] = lorentz_transform(x, y, -ov);
+    [x, y] = this.parent_rf.shift(x, y);
     v = add_velocity(v, ov);
     return [x, y, v];
   }
@@ -209,10 +205,12 @@ class ReferenceFrame {
 
 }
 
+const null_rf = { v: 0, shift: (...args) => args };
+
 class Universe {
 
   constructor(info) {
-    this.origin_rf = new ReferenceFrame(null, 0, 0, 0);
+    this.origin_rf = new ReferenceFrame(null_rf, 0, 0, 0);
 
     this.reference_frames = [];
     this.objects = info.objects;
