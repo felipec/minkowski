@@ -265,11 +265,15 @@ class Animation {
     if (!this.first_timestamp) this.first_timestamp = timestamp;
 
     let progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
+    if (progress >= 1.0) {
+      controls.time = this.end;
+      return;
+    }
+
     controls.time = this.start + (this.end - this.start) * progress;
 
     redraw();
-
-    if (controls.time <= this.end) this.request();
+    this.request();
   }
 
   request() {
