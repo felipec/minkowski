@@ -32,7 +32,7 @@
         <input v-model.number="start" id="animate-start">
         <label>End</label>
         <input v-model.number="end" id="animate-end">
-        <button id="animate-button" onClick="animation.begin();">Begin</button>
+        <button id="animate-button" onClick="animation.begin()">Begin</button>
       </div>
       <h2>Add object</h2>
       <div id="object">
@@ -46,7 +46,7 @@
         <input v-model.number="v">
         <label>Color</label>
         <input v-model="color">
-        <button id="object-button" @click="add();">Add</button>
+        <button id="object-button" @click="add()">Add</button>
       </div>
       <h2>Upload</h2>
       <input type="file" id="file" onChange="upload(this.files[0])">

@@ -7,7 +7,7 @@
  */
 
 var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext("2d");
+var ctx = canvas.getContext('2d');
 
 var universe;
 var size;
@@ -26,6 +26,8 @@ window.addEventListener('resize', resize_canvas, false);
 
 function draw_grid() {
   let d = scale;
+
+  // grid
 
   ctx.strokeStyle = 'hsl(0, 0%, 50%, 25%)';
   ctx.lineWidth = 1;
@@ -121,7 +123,7 @@ function draw_space(x, y, v, color) {
   draw_line(x, y, a, color);
 }
 
-function draw_event(x, y, v, color) {
+function draw_event(x, y, _, color) {
   draw_circle(x, y, color);
 }
 
@@ -148,11 +150,10 @@ function redraw() {
 }
 
 function upload(f) {
-  var reader = new FileReader();
+  let reader = new FileReader();
 
-  reader.onload = function(e) {
-    let text = e.target.result;
-    let info = JSON.parse(text);
+  reader.onload = (e) => {
+    let info = JSON.parse(e.target.result);
     universe = new Universe(info);
     redraw();
   };
@@ -171,9 +172,9 @@ class ReferenceFrame {
     this.color = color;
 
     function make_relative(f) {
-      return function(x, y, v, color) {
+      return function(x, y, v, ...args) {
         [x, y, v] = this.transform(x, y, v);
-        f(x, y, v, color);
+        f(x, y, v, ...args);
       }
     }
 
@@ -246,8 +247,7 @@ class Universe {
     let rfs = this.reference_frames;
     let t = this.time;
 
-    for (let key in this.reference_frames) {
-      let e = rfs[key];
+    for (let e of this.reference_frames) {
       e.draw_axis();
     }
 
@@ -292,18 +292,14 @@ class Animation {
   }
 
   callback(timestamp) {
-    if (this.first_timestamp == null) {
-      this.first_timestamp = timestamp;
-    }
+    if (!this.first_timestamp) this.first_timestamp = timestamp;
 
     let progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
     controls.time = this.start + (this.end - this.start) * progress;
 
     redraw();
 
-    if (controls.time <= this.end) {
-      this.request();
-    }
+    if (controls.time <= this.end) this.request();
   }
 
   request() {
@@ -363,7 +359,7 @@ var object = new Vue({
     color: 'hsl(300, 50%, 50%)',
   },
   methods: {
-    add: function() {
+    add() {
       object = { rf: this.rf, x: this.x, y: this.y, v: this.v, color: this.color };
       universe.objects.push(object);
       universe.update();
