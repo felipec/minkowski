@@ -61,7 +61,7 @@ function draw_grid() {
   ctx.stroke();
 }
 
-function draw_line(x, y, angle, color) {
+function draw_line(x, y, angle, color, segments) {
   let rx = x * scale;
   let ry = y * scale;
 
@@ -69,6 +69,7 @@ function draw_line(x, y, angle, color) {
   ctx.lineWidth = 2;
 
   ctx.beginPath();
+  ctx.setLineDash(segments);
   dx = size * Math.cos(angle);
   dy = size * Math.sin(angle);
   ctx.moveTo(rx - dx, ry - dy);
@@ -108,14 +109,14 @@ function add_velocity(v, u) {
   return (v + u) / (1 + (v * u));
 }
 
-function draw_path(x, y, v, color) {
+function draw_path(x, y, v, color, segments = []) {
   let a = Math.atan(v);
-  draw_line(x, y, Math.PI / 2 - a, color);
+  draw_line(x, y, Math.PI / 2 - a, color, segments);
 }
 
-function draw_space(x, y, v, color) {
+function draw_space(x, y, v, color, segments = []) {
   let a = Math.atan(v);
-  draw_line(x, y, a, color);
+  draw_line(x, y, a, color, segments);
 }
 
 function draw_event(x, y, _, color) {
@@ -194,8 +195,8 @@ class ReferenceFrame {
   }
 
   draw_axis() {
-    this.draw_path(0, 0, 0, this.color);
-    this.draw_space(0, 0, 0, this.color);
+    this.draw_path(0, 0, 0, this.color, [4, 4]);
+    this.draw_space(0, 0, 0, this.color, [4, 4]);
   }
 
 }
