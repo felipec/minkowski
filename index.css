@@ -1,5 +1,5 @@
 body {
-  background-color: #eee;
+  background-color: hsl(0, 0%, 90%);
   font-family: sans-serif;
   display: flex;
   height: 100vh;
@@ -49,4 +49,4 @@ body {
   height: 100%;
 }
 
-label { font-weight: bold; color: #0008; }
+label { font-weight: bold; color: hsl(0, 0%, 0%, 50%); }

@@ -27,7 +27,7 @@ window.addEventListener('resize', resize_canvas, false);
 function draw_grid() {
   let d = scale;
 
-  ctx.strokeStyle = "#4444";
+  ctx.strokeStyle = 'hsl(0, 0%, 30%, 25%)';
   ctx.lineWidth = 1;
 
   ctx.beginPath();
@@ -49,7 +49,7 @@ function draw_grid() {
 
   // light cone
 
-  ctx.strokeStyle = "#bb48";
+  ctx.strokeStyle = 'hsl(60, 50%, 50%, 50%)';
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -128,16 +128,16 @@ function draw_event(x, y, v, color) {
 var universe_info = {
   time: 0,
   reference_frames: [
-    { id: 0, x: 0, y: 0, v: 0, color: '#00f4' },
-    { id: 1, x: 0, y: 0, v: 0.5, color: '#f004' },
+    { id: 0, x: 0, y: 0, v: 0, color: 'hsl(240, 100%, 50%, 25%)' },
+    { id: 1, x: 0, y: 0, v: 0.5, color: 'hsl(0, 100%, 50%, 25%)' },
   ],
   objects: [
-    { rf: 0, x: 0, y: 0, v: 0, color: '#00f8' },
-    { rf: 1, x: 0, y: 0, v: 0, color: '#f008' },
+    { rf: 0, x: 0, y: 0, v: 0, color: 'hsl(240, 100%, 50%, 50%)' },
+    { rf: 1, x: 0, y: 0, v: 0, color: 'hsl(0, 100%, 50%, 50%)' },
   ],
   events: [
-    { rf: 0, x: 0, y: 1, v: 0, color: '#00ff' },
-    { rf: 1, x: 0, y: 1, v: 0, color: '#f00f' },
+    { rf: 0, x: 0, y: 1, v: 0, color: 'hsl(240, 100%, 50%, 100%)' },
+    { rf: 1, x: 0, y: 1, v: 0, color: 'hsl(0, 100%, 50%, 100%)' },
   ],
 };
 
@@ -360,7 +360,7 @@ var object = new Vue({
     x: 0,
     y: 0,
     v: 0,
-    color: '#000f',
+    color: 'hsl(0, 0%, 0%)',
   },
   methods: {
     add: function() {
