@@ -270,7 +270,6 @@ class Animation {
 
     controls.time = this.start + (this.end - this.start) * progress;
 
-    redraw();
     this.request();
   }
 
