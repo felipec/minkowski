@@ -221,26 +221,13 @@ class Universe {
 
     for (let key in info.reference_frames) {
       let e = info.reference_frames[key];
-      e.ctx = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);
-      this.reference_frames[key] = e.ctx;
+      this.reference_frames[key] = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);
     }
 
     this.update();
   }
 
   update() {
-    // Calculate paths of objects
-
-    for (let e of this.objects) {
-      let rf = this.reference_frames[e.rf];
-      let [x, y] = [e.x + rf.x, e.y + rf.y];
-      let v = rf.v;
-
-      [x, y] = lorentz_transform(x, y, -v);
-      v = add_velocity(v, e.v);
-
-      e.ctx = [x, y, v];
-    }
   }
 
   draw() {
@@ -262,13 +249,8 @@ class Universe {
     }
 
     for (let e of this.objects) {
-      let rf = this.origin_rf;
-      let [x, y, v] = e.ctx;
-
-      x += -v * (y - t);
-      y = t;
-
-      rf.draw_event(x, y, 0, e.color);
+      let rf = rfs[e.rf];
+      rf.draw_event(e.x + e.v * t, e.y + t, e.v, e.color);
     }
   }
 
