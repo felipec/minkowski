@@ -203,9 +203,9 @@ const null_rf = { v: 0, shift: (...args) => args };
 class Universe {
 
   constructor(info) {
-    this.origin_rf = new ReferenceFrame(null_rf, 0, 0, 0);
+    this.origin_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
 
-    this.reference_frames = [];
+    this.reference_frames = [ this.origin_rf ];
     this.objects = info.objects || [];
     this.events = info.events || [];
     this.time = info.time || 0;
