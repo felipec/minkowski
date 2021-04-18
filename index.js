@@ -272,11 +272,11 @@ var controls = new Vue({
     time: universe.time,
   },
   watch: {
-    time: function(v) {
+    time(v) {
       universe.time = v;
       redraw();
     },
-    speed: function(v) {
+    speed(v) {
       universe.origin_rf.v = -v;
       redraw();
     },
