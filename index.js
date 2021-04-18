@@ -110,8 +110,8 @@ function draw_event(x, y, _, color) {
 
 var universe_info = {
   objects: [
-    { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 50%, 50%, 100%)' },
-    { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%, 100%)' },
+    { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 50%, 50%)' },
+    { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%)' },
   ],
 };
 
