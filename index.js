@@ -109,6 +109,7 @@ function draw_event(x, y, _, color) {
 }
 
 var universe_info = {
+  description: 'The blue object represents us. The red object is moving at 50% the speed of light to the right.',
   objects: [
     { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 50%, 50%)' },
     { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%)' },
@@ -180,6 +181,8 @@ class Universe {
     this.objects = info.objects || [];
     this.events = info.events || [];
     this.time = info.time || 0;
+
+    description.textContent = info.description;
 
     for (let e of info.reference_frames || []) {
       this.reference_frames[e.id] = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);

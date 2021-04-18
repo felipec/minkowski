@@ -1,4 +1,5 @@
 {
+  "description": "The purple object is one light-year away with our same speed vector. The orange object is at the same distance but moving towards us.\nThe red event represents the moment they collide, which is in our future.",
   "reference_frames": [
     { "id": 1, "x": 1.1547, "y": 0.5774, "v": -0.5, "color": "hsl(270, 100%, 50%, 50%)" }
   ],
