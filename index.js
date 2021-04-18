@@ -124,17 +124,9 @@ function draw_event(x, y, _, color) {
 }
 
 var universe_info = {
-  reference_frames: [
-    { id: 0, x: 0, y: 0, v: 0, color: 'hsl(240, 50%, 50%, 25%)' },
-    { id: 1, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%, 25%)' },
-  ],
   objects: [
-    { rf: 0, x: 0, y: 0, v: 0, color: 'hsl(240, 50%, 50%, 100%)' },
-    { rf: 1, x: 0, y: 0, v: 0, color: 'hsl(0, 50%, 50%, 100%)' },
-  ],
-  events: [
-    { rf: 0, x: 0, y: 1, v: 0, color: 'hsl(240, 50%, 50%, 50%)' },
-    { rf: 1, x: 0, y: 1, v: 0, color: 'hsl(0, 50%, 50%, 50%)' },
+    { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 50%, 50%, 100%)' },
+    { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%, 100%)' },
   ],
 };
 
