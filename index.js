@@ -22,7 +22,12 @@ function resize_canvas() {
   redraw();
 }
 
+function scroll_speed(e) {
+  controls.speed += Math.sign(event.deltaY) * 0.05;
+}
+
 window.addEventListener('resize', resize_canvas, false);
+window.addEventListener('wheel', scroll_speed);
 
 function draw_grid() {
   // grid
