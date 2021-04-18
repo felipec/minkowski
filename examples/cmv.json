@@ -1,17 +1,15 @@
 {
-  "description": "The purple object is one light-year away on our reference frame. The red object is on the same poistiion but in a different reference frame.",
+  "description": "The green event (our present) happens at the same time the blue and red objects collide. But from the perspective of the red object it happens later.",
   "reference_frames": [
-    { "id": 2, "x": 0, "y": 0, "v": 0.5, "color": "hsl(0, 100%, 50%, 25%)" }
+    { "id": 2, "x": 0, "y": 0, "v": 0.5, "color": "hsl(0, 100%, 50%, 50%)" }
   ],
   "objects": [
-    { "rf": 1, "x": 1, "y": 0, "v": 0.0, "color": "hsl(270, 100%, 50%, 100%)" },
-    { "rf": 1, "x": 1.1547, "y": 0, "v": 0.0, "color": "hsl(240, 100%, 50%, 25%)" },
-
-    { "rf": 2, "x": 1, "y": 0, "v": 0.0, "color": "hsl(0, 100%, 50%, 100%)" },
-    { "rf": 2, "x": 1.1547, "y": 0, "v": 0.0, "color": "hsl(30, 100%, 50%, 25%)" }
+    { "rf": 1, "x": 1, "y": 0, "v": 0.0, "color": "hsl(240, 100%, 50%, 80%)" },
+    { "rf": 2, "x": 1.1547, "y": 0, "v": 0.0, "color": "hsl(0, 100%, 50%, 80%)" }
   ],
   "events": [
-    { "rf": 1, "x": 1, "y": 0, "v": 0.0, "color": "hsl(270, 100%, 50%, 50%)" },
-    { "rf": 2, "x": 1.1547, "y": 0, "v": 0.0, "color": "hsl(0, 100%, 50%, 50%)" }
+    { "rf": 1, "x": 0, "y": 0, "v": 0.0, "color": "hsl(150, 100%, 50%, 100%)" },
+    { "rf": 1, "x": 1, "y": 0, "v": 0.0, "color": "hsl(270, 100%, 50%, 100%)" },
+    { "rf": 2, "x": 1.1547, "y": 0, "v": 0.0, "color": "hsl(330, 100%, 50%, 100%)" }
   ]
 }
