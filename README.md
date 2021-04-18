@@ -1,13 +1,17 @@
-The Minkowski space is a mathematical object that represents the reality of our four-dimensional spacetime according to general relativity.
-
-It's hard for most people to imagine the complexity of such objects, especially without good
-visualization tools. This is a simplification with one dimension of space, and one dimension of
-time.
+A [Minkowski diagram](https://en.wikipedia.org/wiki/Spacetime_diagram) shows what would happen to
+different objects as time goes by in order to understand general relativity without mathematical
+equations.
 
 Objects can be added to different reference frames and their path is shown, as well as their current
 position at different times.
 
-This way time dilation and length contraction are easily visualized.
+This way time dilation and length contraction can be easily visualized.
+
+The grid in this visualization represents one year in the vertical axis (time), and one light-year
+in the horizontal axis (space). It can also be considered one second and one light-second.
+
+For every year passed (1 y unit), light travels one light-year (1 x unit), for all observers. This
+is delimited by the light cone shown in light yellow.
 
 ## Reference frames
 
@@ -29,11 +33,8 @@ The key to maintaining a constant speed of light to all observers is a Lorentz t
 rotate to match the velocity of another object we can see reality from their perspective and the
 speed of light always remains constant.
 
-The grid in this visualization represents one year in the vertical axis (time), and one light-year in the
-horizontal axis (space). It can also be considered one second and one light-second.
-
-For every year passed (1 y unit), light travels one light-year (1 x unit), for all observers. This
-is delimited by the light cone shown in light yellow.
+With Lorentz transformations it's possible to switch between reference frames and see what would
+happen to the paths of objects.
 
 ## Now
 
