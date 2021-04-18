@@ -194,13 +194,12 @@ class ReferenceFrame {
 }
 
 const null_rf = { v: 0 };
+const main_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
 
 class Universe {
 
   constructor(info) {
-    this.origin_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
-
-    this.reference_frames = [ this.origin_rf ];
+    this.reference_frames = [ main_rf ];
     this.objects = info.objects || [];
     this.events = info.events || [];
     this.time = info.time || 0;
@@ -208,7 +207,7 @@ class Universe {
     description.textContent = info.description;
 
     for (let e of info.reference_frames || []) {
-      this.reference_frames[e.id] = new ReferenceFrame(this.origin_rf, e.x, e.y, e.v, e.color);
+      this.reference_frames[e.id] = new ReferenceFrame(main_rf, e.x, e.y, e.v, e.color);
     }
   }
 
@@ -288,7 +287,7 @@ var controls = new Vue({
       redraw();
     },
     speed(v) {
-      universe.origin_rf.v = -v;
+      main_rf.v = -v;
       redraw();
     },
   },
