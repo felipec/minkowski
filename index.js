@@ -287,10 +287,10 @@ var object = new Vue({
   el: '#object',
   data: {
     rf: 0,
-    x: 0,
-    y: 0,
-    v: 0,
-    color: 'hsl(300, 50%, 50%)',
+    x: 1.0,
+    y: 0.0,
+    v: 0.5,
+    color: 'magenta',
   },
   methods: {
     add() {
