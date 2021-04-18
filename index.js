@@ -210,6 +210,18 @@ class Universe {
     for (let e of info.reference_frames || []) {
       this.reference_frames[e.id] = new ReferenceFrame(main_rf, e.x, e.y, e.v, e.color);
     }
+
+    // Calculate paths of objects
+
+    for (let e of this.objects) {
+      let rf = this.reference_frames[e.rf];
+      let [x, y] = [e.x + rf.x, e.y + rf.y];
+
+      [x, y] = lorentz_transform(x, y, -rf.v);
+      let v = add_velocity(e.v, rf.v);
+
+      e.ctx = [x, y, v];
+    }
   }
 
   draw() {
@@ -223,12 +235,17 @@ class Universe {
     for (let e of this.objects) {
       let rf = rfs[e.rf];
       rf.draw_path(e.x, e.y, e.v, e.color);
-      rf.draw_event(e.x + e.v * t, e.y + t, e.v, e.color);
     }
 
     for (let e of this.events) {
       let rf = rfs[e.rf];
       rf.draw_event(e.x, e.y, e.v, e.color);
+    }
+
+    for (let e of this.objects) {
+      let rf = main_rf;
+      let [x, y, v] = e.ctx;
+      rf.draw_event(x + v * (t - y), t, v, e.color);
     }
   }
 }
