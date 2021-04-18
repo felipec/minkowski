@@ -35,14 +35,14 @@ function change_example(e) {
       {
         description: "The purple object is one light-year away with our same speed vector. The orange object is at the same distance but moving towards us. The red event represents the moment they collide in orange's reference frame, which is in our future.",
         reference_frames: [
-          { id: 1, x: 1.1547, y: 0.5774, v: -0.5, color: 'hsl(30, 100%, 50%, 50%)' }
+          { id: 2, x: 1.1547, y: 0.5774, v: -0.5, color: 'hsl(30, 100%, 50%, 50%)' }
         ],
         objects: [
-          { rf: 0, x: 1, y: 0, v: 0, color: 'hsl(270, 100%, 50%)' },
-          { rf: 1, x: 0, y: 0, v: 0, color: 'hsl(30, 100%, 50%)' }
+          { rf: 1, x: 1, y: 0, v: 0, color: 'hsl(270, 100%, 50%)' },
+          { rf: 2, x: 0, y: 0, v: 0, color: 'hsl(30, 100%, 50%)' }
         ],
         events: [
-          { rf: 0, x: 0, y: 0.5, v: 0, color: 'hsl(0, 100%, 50%)' }
+          { rf: 1, x: 0, y: 0.5, v: 0, color: 'hsl(0, 100%, 50%)' }
         ]
       },
   };
@@ -134,8 +134,8 @@ function draw_event(x, y, _, color) {
 var universe_info = {
   description: 'The blue object represents us. The red object is moving at 50% the speed of light to the right.',
   objects: [
-    { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 100%, 50%)' },
-    { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 100%, 50%)' },
+    { rf: 1, x: 0, y: 0, v: 0.0, color: 'hsl(240, 100%, 50%)' },
+    { rf: 1, x: 0, y: 0, v: 0.5, color: 'hsl(0, 100%, 50%)' },
   ],
 };
 
@@ -194,12 +194,13 @@ class ReferenceFrame {
 }
 
 const null_rf = { v: 0 };
-const main_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
+const view_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'transparent');
+const main_rf = new ReferenceFrame(view_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
 
 class Universe {
 
   constructor(info) {
-    this.reference_frames = [ main_rf ];
+    this.reference_frames = [ view_rf, main_rf ];
     this.objects = info.objects || [];
     this.events = info.events || [];
     this.time = info.time || 0;
@@ -296,7 +297,7 @@ var controls = new Vue({
 var object = new Vue({
   el: '#object',
   data: {
-    rf: 0,
+    rf: 1,
     x: 1.0,
     y: 0.0,
     v: 0.5,
