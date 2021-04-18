@@ -25,8 +25,6 @@ function resize_canvas() {
 window.addEventListener('resize', resize_canvas, false);
 
 function draw_grid() {
-  let d = scale;
-
   // grid
 
   ctx.strokeStyle = 'hsl(0, 0%, 50%, 25%)';
@@ -34,15 +32,11 @@ function draw_grid() {
 
   ctx.beginPath();
 
-  for (let i = 0; i < 10; i++) {
-    ctx.moveTo(-size, i * d);
-    ctx.lineTo(size, i * d);
-    ctx.moveTo(-size, -i * d);
-    ctx.lineTo(size, -i * d);
-    ctx.moveTo(i * d, -size);
-    ctx.lineTo(i * d, size);
-    ctx.moveTo(-i * d, -size);
-    ctx.lineTo(-i * d, size);
+  for (let i = -10; i < 10; i++) {
+    ctx.moveTo(-size, i * scale);
+    ctx.lineTo(size, i * scale);
+    ctx.moveTo(i * scale, -size);
+    ctx.lineTo(i * scale, size);
   }
 
   ctx.stroke();
@@ -62,32 +56,26 @@ function draw_grid() {
 }
 
 function draw_line(x, y, angle, color, segments) {
-  let rx = x * scale;
-  let ry = y * scale;
-
   ctx.strokeStyle = color;
   ctx.lineWidth = 2;
 
   ctx.beginPath();
   ctx.setLineDash(segments);
-  dx = size * Math.cos(angle);
-  dy = size * Math.sin(angle);
-  ctx.moveTo(rx - dx, ry - dy);
-  ctx.lineTo(rx + dx, ry + dy);
+  let dx = size * Math.cos(angle);
+  let dy = size * Math.sin(angle);
+  ctx.moveTo(x * scale - dx, y * scale - dy);
+  ctx.lineTo(x * scale + dx, y * scale + dy);
 
   ctx.stroke();
 }
 
 function draw_circle(x, y, color) {
-  let rx = x * scale;
-  let ry = y * scale;
-
   ctx.strokeStyle = color;
   ctx.lineWidth = 2;
 
   ctx.beginPath();
   ctx.fillStyle = color;
-  ctx.arc(rx, ry, 8, 0, 2 * Math.PI);
+  ctx.arc(x * scale, y * scale, 8, 0, 2 * Math.PI);
   ctx.fill();
 
   ctx.stroke();
@@ -95,9 +83,7 @@ function draw_circle(x, y, color) {
 
 function lorentz_transform(x, y, v) {
   let g = 1 / Math.sqrt(1 - v ** 2);
-  let x_ = g * (x - v * y);
-  let y_ = g * (y - v * x);
-  return [x_, y_];
+  return [g * (x - v * y), g * (y - v * x)];
 }
 
 function add_velocity(v, u) {
@@ -105,13 +91,11 @@ function add_velocity(v, u) {
 }
 
 function draw_path(x, y, v, color, segments = []) {
-  let a = Math.atan(v);
-  draw_line(x, y, Math.PI / 2 - a, color, segments);
+  draw_line(x, y, Math.PI / 2 - Math.atan(v), color, segments);
 }
 
 function draw_space(x, y, v, color, segments = []) {
-  let a = Math.atan(v);
-  draw_line(x, y, a, color, segments);
+  draw_line(x, y, Math.atan(v), color, segments);
 }
 
 function draw_event(x, y, _, color) {
@@ -177,7 +161,6 @@ class ReferenceFrame {
     this.draw_path(0, 0, 0, this.color, [4, 4]);
     this.draw_space(0, 0, 0, this.color, [4, 4]);
   }
-
 }
 
 const null_rf = { v: 0 };
@@ -208,19 +191,14 @@ class Universe {
     for (let e of this.objects) {
       let rf = rfs[e.rf];
       rf.draw_path(e.x, e.y, e.v, e.color);
+      rf.draw_event(e.x + e.v * t, e.y + t, e.v, e.color);
     }
 
     for (let e of this.events) {
       let rf = rfs[e.rf];
       rf.draw_event(e.x, e.y, e.v, e.color);
     }
-
-    for (let e of this.objects) {
-      let rf = rfs[e.rf];
-      rf.draw_event(e.x + e.v * t, e.y + t, e.v, e.color);
-    }
   }
-
 }
 
 class Animation {
@@ -263,7 +241,8 @@ class Animation {
   }
 }
 
-universe = new Universe(universe_info);
+var universe = new Universe(universe_info);
+var animation = new Animation(10);
 
 var controls = new Vue({
   el: '#controls',
@@ -300,7 +279,5 @@ var object = new Vue({
     }
   },
 })
-
-var animation = new Animation(10);
 
 resize_canvas();
