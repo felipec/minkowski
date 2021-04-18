@@ -247,7 +247,7 @@ class Animation {
 }
 
 var universe = new Universe(universe_info);
-var animation = new Animation(10);
+var animation = new Animation(30);
 
 var controls = new Vue({
   el: '#controls',
