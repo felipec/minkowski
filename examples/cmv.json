@@ -1,5 +1,5 @@
 {
-  "description": "The purple object is one light-year away on our reference frame. The red object is on the same poistiion but a different reference frame.",
+  "description": "The purple object is one light-year away on our reference frame. The red object is on the same poistiion but in a different reference frame.",
   "reference_frames": [
     { "id": 1, "x": 0, "y": 0, "v": 0.5, "color": "hsl(0, 100%, 50%, 25%)" }
   ],
