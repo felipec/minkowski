@@ -23,7 +23,8 @@ function resize_canvas() {
 }
 
 function scroll_speed(e) {
-  controls.speed += Math.sign(event.deltaY) * 0.05;
+  let n = controls.speed + Math.sign(event.deltaY) * 0.05;
+  controls.speed = n > 1.0 ? 1.0 : n < -1.0 ? -1.0 : n;
 }
 
 window.addEventListener('resize', resize_canvas, false);
