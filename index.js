@@ -211,17 +211,19 @@ class Universe {
       this.reference_frames[e.id] = new ReferenceFrame(main_rf, e.x, e.y, e.v, e.color);
     }
 
-    // Calculate paths of objects
-
     for (let e of this.objects) {
-      let rf = this.reference_frames[e.rf];
-      let [x, y] = [e.x + rf.x, e.y + rf.y];
-
-      [x, y] = lorentz_transform(x, y, -rf.v);
-      let v = add_velocity(e.v, rf.v);
-
-      e.ctx = [x, y, v];
+      this.calc_object_path(e);
     }
+  }
+
+  calc_object_path(e) {
+    let rf = this.reference_frames[e.rf];
+    let [x, y] = [e.x + rf.x, e.y + rf.y];
+
+    [x, y] = lorentz_transform(x, y, -rf.v);
+    let v = add_velocity(e.v, rf.v);
+
+    e.ctx = [x, y, v];
   }
 
   draw() {
@@ -324,6 +326,7 @@ var object = new Vue({
     add() {
       object = { rf: this.rf, x: this.x, y: this.y, v: this.v, color: this.color };
       universe.objects.push(object);
+      universe.calc_object_path(object);
       redraw();
     }
   },
