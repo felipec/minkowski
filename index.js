@@ -111,8 +111,8 @@ function draw_event(x, y, _, color) {
 var universe_info = {
   description: 'The blue object represents us. The red object is moving at 50% the speed of light to the right.',
   objects: [
-    { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 50%, 50%)' },
-    { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 50%, 50%)' },
+    { rf: 0, x: 0, y: 0, v: 0.0, color: 'hsl(240, 100%, 50%)' },
+    { rf: 0, x: 0, y: 0, v: 0.5, color: 'hsl(0, 100%, 50%)' },
   ],
 };
 
