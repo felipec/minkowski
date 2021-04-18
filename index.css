@@ -45,3 +45,4 @@ body {
 }
 
 label { font-weight: bold; color: hsl(0, 0%, 0%, 50%); }
+hr { border-top: 2px dotted black; }
