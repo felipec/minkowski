@@ -279,7 +279,7 @@ var animation = new Animation(30);
 var controls = new Vue({
   el: '#controls',
   data: {
-    speed: 0,
+    speed: main_rf.v,
     time: universe.time,
   },
   watch: {
