@@ -27,6 +27,29 @@ function scroll_speed(e) {
   controls.speed = n > 1.0 ? 1.0 : n < -1.0 ? -1.0 : n;
 }
 
+function change_example(e) {
+  let examples = {
+    basic:
+      universe_info,
+    approaching:
+      {
+        description: "The purple object is one light-year away with our same speed vector. The orange object is at the same distance but moving towards us. The red event represents the moment they collide in orange's reference frame, which is in our future.",
+        reference_frames: [
+          { id: 1, x: 1.1547, y: 0.5774, v: -0.5, color: 'hsl(30, 100%, 50%, 50%)' }
+        ],
+        objects: [
+          { rf: 0, x: 1, y: 0, v: 0, color: 'hsl(270, 100%, 50%)' },
+          { rf: 1, x: 0, y: 0, v: 0, color: 'hsl(30, 100%, 50%)' }
+        ],
+        events: [
+          { rf: 0, x: 0, y: 0.5, v: 0, color: 'hsl(0, 100%, 50%)' }
+        ]
+      },
+  };
+  universe = new Universe(examples[e.target.value]);
+  redraw();
+}
+
 window.addEventListener('resize', resize_canvas, false);
 window.addEventListener('wheel', scroll_speed);
 

@@ -37,8 +37,16 @@
         <input v-model="color">
         <button id="object-button" @click="add()">Add</button>
       </div>
-      <h2>Upload</h2>
-      <input type="file" id="file" onChange="upload(this.files[0])">
+      <h2>Scene</h2>
+      <div id="scene">
+        <label>Example</label>
+        <select id="example" onChange="change_example(event)">
+          <option value="basic">Basic</option>
+          <option value="approaching">Approaching</option>
+        </select>
+        <label>Upload</label>
+        <input type="file" id="file" onChange="upload(this.files[0])">
+      </div>
     </div>
     <div id="main">
       <canvas id="canvas"></canvas>

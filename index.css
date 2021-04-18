@@ -23,6 +23,12 @@ body {
   grid-gap: 8px;
 }
 
+#scene {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 8px;
+}
+
 #animate-button {
   grid-column: 1 / 4;
 }
