@@ -233,8 +233,8 @@ class Animation {
     this.cancel();
 
     this.first_timestamp = null;
-    this.start = animate.start;
-    this.end = animate.end;
+    this.start = -4;
+    this.end = +4;
 
     controls.time = this.start;
     this.request();
@@ -280,14 +280,6 @@ var controls = new Vue({
       universe.origin_rf.v = -v;
       redraw();
     },
-  },
-})
-
-var animate = new Vue({
-  el: '#animate',
-  data: {
-    start: -4,
-    end: 4,
   },
 })
 
