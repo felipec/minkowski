@@ -100,11 +100,6 @@ function lorentz_transform(x, y, v) {
   return [x_, y_];
 }
 
-function lorentz_shift(x, y, dx, dy, v) {
-  [dx, dy] = lorentz_transform(dx, dy, v);
-  return [x + dx, y + dy];
-}
-
 function add_velocity(v, u) {
   return (v + u) / (1 + (v * u));
 }
@@ -170,15 +165,10 @@ class ReferenceFrame {
     this.draw_event = make_relative(draw_event);
   }
 
-  shift(x, y) {
-      return lorentz_shift(x, y, this.x, this.y, -this.v);
-  }
-
   transform(x, y, v) {
     [x, y] = [x + this.x, y + this.y]
     let ov = add_velocity(this.v, this.parent_rf.v);
     [x, y] = lorentz_transform(x, y, -ov);
-    [x, y] = this.parent_rf.shift(x, y);
     v = add_velocity(v, ov);
     return [x, y, v];
   }
@@ -190,7 +180,7 @@ class ReferenceFrame {
 
 }
 
-const null_rf = { v: 0, shift: (...args) => args };
+const null_rf = { v: 0 };
 
 class Universe {
 
