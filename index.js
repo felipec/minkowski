@@ -280,8 +280,6 @@ var controls = new Vue({
   data: {
     speed: 0,
     time: universe.time,
-    shift_x: 0,
-    shift_y: 0,
   },
   watch: {
     time: function(v) {
@@ -290,14 +288,6 @@ var controls = new Vue({
     },
     speed: function(v) {
       universe.origin_rf.v = -v;
-      redraw();
-    },
-    shift_x: function(v) {
-      universe.origin_rf.x = -v;
-      redraw();
-    },
-    shift_y: function(v) {
-      universe.origin_rf.y = -v;
       redraw();
     },
   },
