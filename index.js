@@ -99,15 +99,10 @@ function draw_line(x, y, angle, color, segments) {
 }
 
 function draw_circle(x, y, color) {
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 2;
-
   ctx.beginPath();
   ctx.fillStyle = color;
   ctx.arc(x * scale, y * scale, 8, 0, 2 * Math.PI);
   ctx.fill();
-
-  ctx.stroke();
 }
 
 function lorentz_transform(x, y, v) {
