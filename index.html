@@ -1,58 +1,51 @@
 <!doctype html>
 
-<html lang="en">
+<meta charset="utf-8">
+<title>General Relativity</title>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<link rel="stylesheet" href="index.css">
 
-  <head>
-    <meta charset="utf-8">
-    <title>General Relativity</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-    <link rel="stylesheet" href="index.css">
-  </head>
+<aside id="left">
+  <p id="description"></p>
+  <hr>
+  <h2>Controls</h2>
+  <div id="controls">
+    <label>Time</label>
+    <input v-model.number="time">
+    <input v-model.number="time" type="range" min="-4" max="4" value="0" class="slider" step="0.01">
+    <label>Speed</label>
+    <input v-model.number="speed">
+    <input v-model.number="speed" type="range" min="-1" max="1" value="0" class="slider" step="0.01">
+    <button id="animate-button" @click="animation.begin()">Animate</button>
+  </div>
+  <h2>Add object</h2>
+  <div id="object">
+    <label>Reference frame</label>
+    <input v-model.number="rf">
+    <label>X</label>
+    <input v-model.number="x">
+    <label>Y</label>
+    <input v-model.number="y">
+    <label>Velocity</label>
+    <input v-model.number="v">
+    <label>Color</label>
+    <input v-model="color">
+    <button id="object-button" @click="add()">Add</button>
+  </div>
+  <h2>Scene</h2>
+  <div id="scene">
+    <label>Example</label>
+    <select id="example" onChange="change_example(event)">
+      <option value="basic">Basic</option>
+      <option value="approaching">Approaching</option>
+    </select>
+    <label>Upload</label>
+    <input type="file" id="file" onChange="upload(this.files[0])">
+  </div>
+</aside>
 
-  <body>
-    <div id="left">
-      <p id="description"></p>
-      <hr>
-      <h2>Controls</h2>
-      <div id="controls">
-        <label>Time</label>
-        <input v-model.number="time">
-        <input v-model.number="time" type="range" min="-4" max="4" value="0" class="slider" step="0.01">
-        <label>Speed</label>
-        <input v-model.number="speed">
-        <input v-model.number="speed" type="range" min="-1" max="1" value="0" class="slider" step="0.01">
-        <button id="animate-button" @click="animation.begin()">Animate</button>
-      </div>
-      <h2>Add object</h2>
-      <div id="object">
-        <label>Reference frame</label>
-        <input v-model.number="rf">
-        <label>X</label>
-        <input v-model.number="x">
-        <label>Y</label>
-        <input v-model.number="y">
-        <label>Velocity</label>
-        <input v-model.number="v">
-        <label>Color</label>
-        <input v-model="color">
-        <button id="object-button" @click="add()">Add</button>
-      </div>
-      <h2>Scene</h2>
-      <div id="scene">
-        <label>Example</label>
-        <select id="example" onChange="change_example(event)">
-          <option value="basic">Basic</option>
-          <option value="approaching">Approaching</option>
-        </select>
-        <label>Upload</label>
-        <input type="file" id="file" onChange="upload(this.files[0])">
-      </div>
-    </div>
-    <div id="main">
-      <canvas id="canvas"></canvas>
-    </div>
-  </body>
+<main id="main">
+  <canvas id="canvas"></canvas>
+</main>
 
-  <script src="index.js"></script>
-
-</html>
+<script src="index.js"></script>

@@ -158,7 +158,6 @@ function upload(f) {
 }
 
 class ReferenceFrame {
-
   constructor(parent_rf, x, y, v, color) {
     this.parent_rf = parent_rf;
 
@@ -198,7 +197,6 @@ const view_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'transparent');
 const main_rf = new ReferenceFrame(view_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
 
 class Universe {
-
   constructor(info) {
     this.reference_frames = [ view_rf, main_rf ];
     this.objects = info.objects || [];
@@ -253,7 +251,6 @@ class Universe {
 }
 
 class Animation {
-
   constructor(seconds) {
     this.seconds = seconds;
   }
