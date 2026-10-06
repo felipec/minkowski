@@ -6,12 +6,12 @@
  *
  */
 
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-var universe;
 var size;
-var scale = 100;
+
+const scale = 100;
 
 function resize_canvas() {
   canvas.width = canvas.offsetWidth;
@@ -23,12 +23,12 @@ function resize_canvas() {
 }
 
 function scroll_speed(e) {
-  let n = controls.speed + Math.sign(event.deltaY) * 0.05;
+  const n = controls.speed + Math.sign(event.deltaY) * 0.05;
   controls.speed = n > 1.0 ? 1.0 : n < -1.0 ? -1.0 : n;
 }
 
 function change_example(e) {
-  let examples = {
+  const examples = {
     basic:
       universe_info,
     approaching:
@@ -90,8 +90,8 @@ function draw_line(x, y, angle, color, segments) {
 
   ctx.beginPath();
   ctx.setLineDash(segments);
-  let dx = size * Math.cos(angle);
-  let dy = size * Math.sin(angle);
+  const dx = size * Math.cos(angle);
+  const dy = size * Math.sin(angle);
   ctx.moveTo(x * scale - dx, y * scale - dy);
   ctx.lineTo(x * scale + dx, y * scale + dy);
 
@@ -106,19 +106,19 @@ function draw_circle(x, y, color) {
 }
 
 function lorentz_transform(x, y, v) {
-  let g = 1 / Math.sqrt(1 - v ** 2);
+  const g = 1 / Math.sqrt(1 - v * v);
   return [g * (x - v * y), g * (y - v * x)];
 }
 
 function add_velocity(v, u) {
-  return (v + u) / (1 + (v * u));
+  return (v + u) / (1 + v * u);
 }
 
-function draw_path(x, y, v, color, segments = []) {
+function draw_path(x, y, v, color, segments=[]) {
   draw_line(x, y, Math.PI / 2 - Math.atan(v), color, segments);
 }
 
-function draw_space(x, y, v, color, segments = []) {
+function draw_space(x, y, v, color, segments=[]) {
   draw_line(x, y, Math.atan(v), color, segments);
 }
 
@@ -126,7 +126,7 @@ function draw_event(x, y, _, color) {
   draw_circle(x, y, color);
 }
 
-var universe_info = {
+const universe_info = {
   description: 'The blue object represents us. The red object is moving at 50% the speed of light to the right.',
   objects: [
     { rf: 1, x: 0, y: 0, v: 0.0, color: 'hsl(240, 100%, 50%)' },
@@ -141,10 +141,10 @@ function redraw() {
 }
 
 function upload(f) {
-  let reader = new FileReader();
+  const reader = new FileReader();
 
   reader.onload = (e) => {
-    let info = JSON.parse(e.target.result);
+    const info = JSON.parse(e.target.result);
     universe = new Universe(info);
     redraw();
   };
@@ -175,7 +175,7 @@ class ReferenceFrame {
 
   transform(x, y, v) {
     [x, y] = [x + this.x, y + this.y]
-    let ov = add_velocity(this.v, this.parent_rf.v);
+    const ov = add_velocity(this.v, this.parent_rf.v);
     [x, y] = lorentz_transform(x, y, -ov);
     v = add_velocity(v, ov);
     return [x, y, v];
@@ -200,46 +200,46 @@ class Universe {
 
     description.textContent = info.description;
 
-    for (let e of info.reference_frames || []) {
+    for (const e of info.reference_frames || []) {
       this.reference_frames[e.id] = new ReferenceFrame(main_rf, e.x, e.y, e.v, e.color);
     }
 
-    for (let e of this.objects) {
+    for (const e of this.objects) {
       this.calc_object_path(e);
     }
   }
 
   calc_object_path(e) {
-    let rf = this.reference_frames[e.rf];
+    const rf = this.reference_frames[e.rf];
     let [x, y] = [e.x + rf.x, e.y + rf.y];
 
     [x, y] = lorentz_transform(x, y, -rf.v);
-    let v = add_velocity(e.v, rf.v);
+    const v = add_velocity(e.v, rf.v);
 
     e.ctx = [x, y, v];
   }
 
   draw() {
-    let rfs = this.reference_frames;
-    let t = this.time;
+    const rfs = this.reference_frames;
+    const t = this.time;
 
-    for (let e of this.reference_frames) {
+    for (const e of this.reference_frames) {
       e.draw_axis();
     }
 
-    for (let e of this.objects) {
-      let rf = rfs[e.rf];
+    for (const e of this.objects) {
+      const rf = rfs[e.rf];
       rf.draw_path(e.x, e.y, e.v, e.color);
     }
 
-    for (let e of this.events) {
-      let rf = rfs[e.rf];
+    for (const e of this.events) {
+      const rf = rfs[e.rf];
       rf.draw_event(e.x, e.y, e.v, e.color);
     }
 
-    for (let e of this.objects) {
-      let rf = main_rf;
-      let [x, y, v] = e.ctx;
+    for (const e of this.objects) {
+      const rf = main_rf;
+      const [x, y, v] = e.ctx;
       rf.draw_event(x + v * (t - y), t, v, e.color);
     }
   }
@@ -264,7 +264,7 @@ class Animation {
   callback(timestamp) {
     if (!this.first_timestamp) this.first_timestamp = timestamp;
 
-    let progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
+    const progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
     if (progress >= 1.0) {
       controls.time = this.end;
       return;
@@ -285,7 +285,7 @@ class Animation {
 }
 
 var universe = new Universe(universe_info);
-var animation = new Animation(30);
+const animation = new Animation(30);
 
 var controls = new Vue({
   el: '#controls',
