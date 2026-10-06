@@ -1,5 +1,5 @@
 body {
-  background-color: hsl(0, 0%, 90%);
+  background-color: oklch(0.9 0 0);
   font-family: sans-serif;
   display: flex;
   height: 100vh;
@@ -50,5 +50,5 @@ body {
   height: 100%;
 }
 
-label { font-weight: bold; color: hsl(0, 0%, 0%, 50%); }
+label { font-weight: bold; color: oklch(0 0 0 / 50%); }
 hr { border-top: 2px dotted black; }

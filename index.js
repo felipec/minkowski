@@ -35,14 +35,14 @@ function change_example(e) {
       {
         description: "The purple object is one light-year away with our same speed vector. The orange object is at the same distance but moving towards us. The red event represents the moment they collide in orange's reference frame, which is in our future.",
         reference_frames: [
-          { id: 2, x: 1.1547, y: 0.5774, v: -0.5, color: 'hsl(30, 100%, 50%, 50%)' }
+          { id: 2, x: 1.1547, y: 0.5774, v: -0.5, color: 'oklch(0.75 0.2 60 / 50%)' }
         ],
         objects: [
-          { rf: 1, x: 1, y: 0, v: 0, color: 'hsl(270, 100%, 50%)' },
-          { rf: 2, x: 0, y: 0, v: 0, color: 'hsl(30, 100%, 50%)' }
+          { rf: 1, x: 1, y: 0, v: 0, color: 'oklch(0.5 0.2 300)' },
+          { rf: 2, x: 0, y: 0, v: 0, color: 'oklch(0.75 0.2 60)' }
         ],
         events: [
-          { rf: 1, x: 0, y: 0.5, v: 0, color: 'hsl(0, 100%, 50%)' }
+          { rf: 1, x: 0, y: 0.5, v: 0, color: 'oklch(0.6 0.2 30)' }
         ]
       },
   };
@@ -56,7 +56,7 @@ window.addEventListener('wheel', scroll_speed);
 function draw_grid() {
   // grid
 
-  ctx.strokeStyle = 'hsl(0, 0%, 50%, 25%)';
+  ctx.strokeStyle = 'oklch(0.6 0 0 / 25%)';
   ctx.lineWidth = 1;
 
   ctx.beginPath();
@@ -72,7 +72,7 @@ function draw_grid() {
 
   // light cone
 
-  ctx.strokeStyle = 'hsl(60, 50%, 50%, 25%)';
+  ctx.strokeStyle = 'oklch(0.75 0.15 90 / 25%)';
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -129,8 +129,8 @@ function draw_event(x, y, _, color) {
 const universe_info = {
   description: 'The blue object represents us. The red object is moving at 50% the speed of light to the right.',
   objects: [
-    { rf: 1, x: 0, y: 0, v: 0.0, color: 'hsl(240, 100%, 50%)' },
-    { rf: 1, x: 0, y: 0, v: 0.5, color: 'hsl(0, 100%, 50%)' },
+    { rf: 1, x: 0, y: 0, v: 0.0, color: 'oklch(0.5 0.25 270)' },
+    { rf: 1, x: 0, y: 0, v: 0.5, color: 'oklch(0.5 0.25 30)' },
   ],
 };
 
@@ -189,7 +189,7 @@ class ReferenceFrame {
 
 const null_rf = { v: 0 };
 const view_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'transparent');
-const main_rf = new ReferenceFrame(view_rf, 0, 0, 0, 'hsl(0, 0%, 50%, 50%)');
+const main_rf = new ReferenceFrame(view_rf, 0, 0, 0, 'oklch(0.6 0 0 / 50%)');
 
 class Universe {
   constructor(info) {
