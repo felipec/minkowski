@@ -12,6 +12,15 @@ var size;
 
 const scale = 100;
 
+function lorentz_transform(x, y, v) {
+  const g = 1 / Math.sqrt(1 - v * v);
+  return [g * (x - v * y), g * (y - v * x)];
+}
+
+function add_velocity(v, u) {
+  return (v + u) / (1 + v * u);
+}
+
 function resize_canvas() {
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
@@ -102,15 +111,6 @@ function draw_circle(x, y, color) {
   ctx.fillStyle = color;
   ctx.arc(x * scale, y * scale, 8, 0, 2 * Math.PI);
   ctx.fill();
-}
-
-function lorentz_transform(x, y, v) {
-  const g = 1 / Math.sqrt(1 - v * v);
-  return [g * (x - v * y), g * (y - v * x)];
-}
-
-function add_velocity(v, u) {
-  return (v + u) / (1 + v * u);
 }
 
 function draw_path(x, y, v, color, segments=[]) {
