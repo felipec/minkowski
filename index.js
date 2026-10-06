@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2019 Felipe Contreras
+ * Copyright (C) 2019-2026 Felipe Contreras
  *
- * This file may be used under the terms of the GNU Lesser General Public
- * License version 2.1.
+ * This file may be used under the terms of the ISC License.
  *
  */
 
