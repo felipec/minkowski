@@ -65,19 +65,39 @@ function change_example(e) {
 window.addEventListener('resize', resize_canvas, false);
 window.addEventListener('wheel', scroll_speed);
 
-function draw_grid() {
+function draw_grid(v) {
   // grid
+
+  const g = 1 / Math.sqrt(1 - v * v);
+
+  const ux = canvas.offsetWidth / (2 * scale);
+  const uy = canvas.offsetHeight / (2 * scale);
+  const cx = 0;
+  const ct = 0;
+
+  const [cx_, ct_] = lorentz_transform(cx, ct, v);
+  const [ux_, uy_] = lorentz_transform(ux, uy, -Math.abs(v));
+
+  const n_min = Math.floor(cx_ - ux_ - 1e-9);
+  const n_max = Math.ceil(cx_ + ux_ + 1e-9);
+  const m_min = Math.floor(ct_ - uy_ - 1e-9);
+  const m_max = Math.ceil(ct_ + uy_ + 1e-9);
+
+  const dd = g * scale;
+  const dc = g * v * scale;
 
   ctx.strokeStyle = 'oklch(0.6 0 0 / 25%)';
   ctx.lineWidth = 1;
 
   ctx.beginPath();
 
-  for (let i = -10; i < 10; i++) {
-    ctx.moveTo(-size, i * scale);
-    ctx.lineTo(size, i * scale);
-    ctx.moveTo(i * scale, -size);
-    ctx.lineTo(i * scale, size);
+  for (let n = n_min; n <= n_max; n++) {
+    ctx.moveTo(n * dd + m_min * dc, n * dc + m_min * dd);
+    ctx.lineTo(n * dd + m_max * dc, n * dc + m_max * dd);
+  }
+  for (let m = m_min; m <= m_max; m++) {
+    ctx.moveTo(n_min * dd + m * dc, n_min * dc + m * dd);
+    ctx.lineTo(n_max * dd + m * dc, n_max * dc + m * dd);
   }
 
   ctx.stroke();
@@ -139,7 +159,7 @@ const universe_info = {
 
 function redraw() {
   ctx.clearRect(-canvas.width, -canvas.height, canvas.width * 2, canvas.height * 2);
-  draw_grid();
+  draw_grid(controls.root_grid ? -view_rf.v : 0);
   universe.draw();
 }
 
@@ -290,6 +310,7 @@ var controls = new Vue({
   data: {
     speed: view_rf.v,
     time: universe.time,
+    root_grid: false,
   },
   watch: {
     time(v) {
@@ -298,6 +319,9 @@ var controls = new Vue({
     },
     speed(v) {
       view_rf.v = v;
+      redraw();
+    },
+    root_grid(v) {
       redraw();
     },
   },
