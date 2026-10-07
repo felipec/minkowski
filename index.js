@@ -47,14 +47,14 @@ function change_example(e) {
       {
         description: "The purple object is one light-year away with our same speed vector. The orange object is at the same distance but moving towards us. The red event represents the moment they collide in orange's reference frame, which is in our future.",
         reference_frames: [
-          { id: 2, x: 1.1547, y: 0.5774, v: -0.5, color: 'oklch(0.75 0.2 60 / 50%)' }
+          { id: 1, x: 1.1547, y: 0.5774, v: -0.5, color: 'oklch(0.75 0.2 60 / 50%)' }
         ],
         objects: [
-          { rf: 1, x: 1, y: 0, v: 0, color: 'oklch(0.5 0.2 300)' },
-          { rf: 2, x: 0, y: 0, v: 0, color: 'oklch(0.75 0.2 60)' }
+          { rf: 0, x: 1, y: 0, v: 0, color: 'oklch(0.5 0.2 300)' },
+          { rf: 1, x: 0, y: 0, v: 0, color: 'oklch(0.75 0.2 60)' }
         ],
         events: [
-          { rf: 1, x: 0, y: 0.5, v: 0, color: 'oklch(0.6 0.2 30)' }
+          { rf: 0, x: 0, y: 0.5, v: 0, color: 'oklch(0.6 0.2 30)' }
         ]
       },
   };
@@ -132,8 +132,8 @@ function draw_event(x, y, _, color) {
 const universe_info = {
   description: 'The blue object represents us. The red object is moving at 50% the speed of light to the right.',
   objects: [
-    { rf: 1, x: 0, y: 0, v: 0.0, color: 'oklch(0.5 0.25 270)' },
-    { rf: 1, x: 0, y: 0, v: 0.5, color: 'oklch(0.5 0.25 30)' },
+    { rf: 0, x: 0, y: 0, v: 0.0, color: 'oklch(0.5 0.25 270)' },
+    { rf: 0, x: 0, y: 0, v: 0.5, color: 'oklch(0.5 0.25 30)' },
   ],
 };
 
@@ -181,7 +181,6 @@ class ReferenceFrame {
 
 const root_rf = new ReferenceFrame(0, 0, 0, 'oklch(0.6 0 0 / 50%)');
 const view_rf = new ReferenceFrame(0, 0, 0);
-const main_rf = new ReferenceFrame(0, 0, 0);
 
 function reframe(source, target, x, y, v) {
   return target.from_root(...source.to_root(x, y, v));
@@ -189,7 +188,7 @@ function reframe(source, target, x, y, v) {
 
 class Universe {
   constructor(info) {
-    this.reference_frames = [ root_rf, main_rf ];
+    this.reference_frames = [ root_rf ];
     this.objects = info.objects || [];
     this.events = info.events || [];
     this.time = info.time || 0;
@@ -307,7 +306,7 @@ var controls = new Vue({
 var object = new Vue({
   el: '#object',
   data: {
-    rf: 1,
+    rf: 0,
     x: 1.0,
     y: 0.0,
     v: 0.5,
