@@ -35,7 +35,7 @@ function resize_canvas() {
 }
 
 function scroll_speed(e) {
-  const n = controls.speed + Math.sign(event.deltaY) * 0.05;
+  const n = controls.speed - Math.sign(event.deltaY) * 0.05;
   controls.speed = n > 1.0 ? 1.0 : n < -1.0 ? -1.0 : n;
 }
 
