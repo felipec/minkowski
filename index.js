@@ -21,6 +21,10 @@ function add_velocity(v, u) {
   return (v + u) / (1 + v * u);
 }
 
+function relative(transform, draw) {
+  return (x, y, v, ...args) => draw(...transform(x, y, v), ...args);
+}
+
 function resize_canvas() {
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
@@ -152,47 +156,40 @@ function upload(f) {
 }
 
 class ReferenceFrame {
-  constructor(parent_rf, x, y, v, color) {
-    this.parent_rf = parent_rf;
-
+  constructor(x, y, v, color='transparent') {
+    [x, y] = lorentz_transform(x, y, -v);
     this.x = x;
     this.y = y;
     this.v = v;
     this.color = color;
-
-    function make_relative(f) {
-      return function(x, y, v, ...args) {
-        [x, y, v] = this.transform(x, y, v);
-        f(x, y, v, ...args);
-      }
-    }
-
-    this.draw_path = make_relative(draw_path);
-    this.draw_space = make_relative(draw_space);
-    this.draw_event = make_relative(draw_event);
   }
 
-  transform(x, y, v) {
-    [x, y] = [x + this.x, y + this.y]
-    const ov = add_velocity(this.v, this.parent_rf.v);
-    [x, y] = lorentz_transform(x, y, -ov);
-    v = add_velocity(v, ov);
+  to_root(x, y, v) {
+    [x, y] = lorentz_transform(x, y, -this.v);
+    v = add_velocity(v, this.v);
+    return [x + this.x, y + this.y, v];
+  }
+
+  from_root(x, y, v) {
+    x -= this.x;
+    y -= this.y;
+    [x, y] = lorentz_transform(x, y, this.v);
+    v = add_velocity(v, -this.v);
     return [x, y, v];
-  }
-
-  draw_axis() {
-    this.draw_path(0, 0, 0, this.color, [4, 4]);
-    this.draw_space(0, 0, 0, this.color, [4, 4]);
   }
 }
 
-const null_rf = { v: 0 };
-const view_rf = new ReferenceFrame(null_rf, 0, 0, 0, 'transparent');
-const main_rf = new ReferenceFrame(view_rf, 0, 0, 0, 'oklch(0.6 0 0 / 50%)');
+const root_rf = new ReferenceFrame(0, 0, 0, 'oklch(0.6 0 0 / 50%)');
+const view_rf = new ReferenceFrame(0, 0, 0);
+const main_rf = new ReferenceFrame(0, 0, 0);
+
+function reframe(source, target, x, y, v) {
+  return target.from_root(...source.to_root(x, y, v));
+}
 
 class Universe {
   constructor(info) {
-    this.reference_frames = [ view_rf, main_rf ];
+    this.reference_frames = [ root_rf, main_rf ];
     this.objects = info.objects || [];
     this.events = info.events || [];
     this.time = info.time || 0;
@@ -200,7 +197,7 @@ class Universe {
     description.textContent = info.description;
 
     for (const e of info.reference_frames || []) {
-      this.reference_frames[e.id] = new ReferenceFrame(main_rf, e.x, e.y, e.v, e.color);
+      this.reference_frames[e.id] = new ReferenceFrame(e.x, e.y, e.v, e.color);
     }
 
     for (const e of this.objects) {
@@ -210,36 +207,39 @@ class Universe {
 
   calc_object_path(e) {
     const rf = this.reference_frames[e.rf];
-    let [x, y] = [e.x + rf.x, e.y + rf.y];
-
-    [x, y] = lorentz_transform(x, y, -rf.v);
-    const v = add_velocity(e.v, rf.v);
-
-    e.ctx = [x, y, v];
+    e.ctx = reframe(rf, root_rf, e.x, e.y, e.v);
   }
 
   draw() {
     const rfs = this.reference_frames;
+    const to_view = (source, x, y, v) => reframe(source, view_rf, x, y, v);
     const t = this.time;
 
-    for (const e of this.reference_frames) {
-      e.draw_axis();
+    for (const rf of rfs) {
+      relative((x, y, v) => to_view(rf, x, y, v), (x, y, v, color) => {
+        draw_path(x, y, v, color, [4, 4]);
+        draw_space(x, y, v, color, [4, 4]);
+      })(0, 0, 0, rf.color);
     }
 
-    for (const e of this.objects) {
-      const rf = rfs[e.rf];
-      rf.draw_path(e.x, e.y, e.v, e.color);
+    for (const obj of this.objects) {
+      const rf = rfs[obj.rf];
+      relative((x, y, v) => to_view(rf, x, y, v), (x, y, v, color) =>
+        draw_path(x, y, v, color))(obj.x, obj.y, obj.v, obj.color);
     }
 
-    for (const e of this.events) {
-      const rf = rfs[e.rf];
-      rf.draw_event(e.x, e.y, e.v, e.color);
+    for (const ev of this.events) {
+      const rf = rfs[ev.rf];
+      relative((x, y, v) => to_view(rf, x, y, v), (x, y, v, color) =>
+        draw_event(x, y, v, color))(ev.x, ev.y, ev.v, ev.color);
     }
 
-    for (const e of this.objects) {
-      const rf = main_rf;
-      const [x, y, v] = e.ctx;
-      rf.draw_event(x + v * (t - y), t, v, e.color);
+    for (const obj of this.objects) {
+      const [x0, y0, v0] = obj.ctx;
+      const sim = x0 + v0 * (t - y0);
+      relative((x, y, v) => to_view(root_rf, x, y, v), (x, y, v, color) => {
+        draw_event(x, y, v, color);
+      })(sim, this.time, v0, obj.color);
     }
   }
 }
@@ -289,7 +289,7 @@ const animation = new Animation(30);
 var controls = new Vue({
   el: '#controls',
   data: {
-    speed: main_rf.v,
+    speed: view_rf.v,
     time: universe.time,
   },
   watch: {
@@ -298,7 +298,7 @@ var controls = new Vue({
       redraw();
     },
     speed(v) {
-      main_rf.v = -v;
+      view_rf.v = v;
       redraw();
     },
   },
