@@ -128,6 +128,7 @@ function draw_line(x, y, angle, color, segments) {
   ctx.lineTo(x * scale + dx, y * scale + dy);
 
   ctx.stroke();
+  ctx.setLineDash([]);
 }
 
 function draw_circle(x, y, color) {
