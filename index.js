@@ -142,6 +142,7 @@ function draw_path(x, y, v, color, segments=[]) {
 }
 
 function draw_space(x, y, v, color, segments=[]) {
+  color = `oklch(from ${color} l c h / 0.75)`;
   draw_line(x, y, Math.atan(v), color, segments);
 }
 
