@@ -260,6 +260,7 @@ class Universe {
       const sim = x0 + v0 * (t - y0);
       relative((x, y, v) => to_view(root_rf, x, y, v), (x, y, v, color) => {
         draw_event(x, y, v, color);
+        draw_space(x, y, v, color, [4, 4]);
       })(sim, this.time, v0, obj.color);
     }
   }
