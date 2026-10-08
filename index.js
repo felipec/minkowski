@@ -112,7 +112,6 @@ function draw_grid(v) {
   ctx.lineTo(size, size);
   ctx.moveTo(-size, size);
   ctx.lineTo(size, -size);
-
   ctx.stroke();
 }
 
